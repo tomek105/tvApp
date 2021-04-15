@@ -8,6 +8,7 @@ class TVapp {
     }
     initializeApp = () => {
         this.connectDOMElements();
+        this.setupListeners();
     }
 
     connectDOMElements = () => {
@@ -17,11 +18,20 @@ class TVapp {
         console.log(listOfIds);
         console.log(listOfShowNames);
 
-        this.viewElems = mapListToDOMElements(listOfIds);
-        this.showNamesButtons = mapListToDOMElements(listOfShowNames);
+        this.viewElems = mapListToDOMElements(listOfIds, 'id');
+        this.showNamesButtons = mapListToDOMElements(listOfShowNames,'data-show-name');
 
         console.log(this.viewElems);
         console.log(this.showNamesButtons);
+    }
+
+    setupListeners = () =>{
+        Object.keys(this.showNamesButtons).forEach(showName => {
+            this.showNamesButtons[showName].addEventListener("click", this.setCurrentNameFilter);
+        })
+    }
+    setCurrentNameFilter = () =>{
+        this.selectedName = event.target.dataset.showName;
     }
 }
 document.addEventListener("DOMContentLoaded", new TVapp());
