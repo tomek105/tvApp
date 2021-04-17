@@ -3,7 +3,8 @@ import {
     createDOMElement
 } from "./domInteractions.js";
 import {
-    getShowsByKey
+    getShowsByKey,
+    getShowsById
 } from "./requests.js";
 class TVapp {
     constructor() {
@@ -23,14 +24,8 @@ class TVapp {
         const listOfIds = Array.from(document.querySelectorAll('[id]')).map(elem => elem.id);
         const listOfShowNames = Array.from(document.querySelectorAll('[data-show-name]')).map(elem => elem.dataset.showName);
 
-        console.log(listOfIds);
-        console.log(listOfShowNames);
-
         this.viewElems = mapListToDOMElements(listOfIds, 'id');
         this.showNamesButtons = mapListToDOMElements(listOfShowNames, 'data-show-name');
-
-        console.log(this.viewElems);
-        console.log(this.showNamesButtons);
     }
 
     setupListeners = () => {
@@ -45,17 +40,41 @@ class TVapp {
     }
 
     fetchAndDisplayShows = () => {
-        getShowsByKey(this.selectedName).then(shows => this.renderCards(shows));
+        getShowsByKey(this.selectedName).then(shows => this.renderCardsOnList(shows));
     }
 
-    renderCards = shows => {
-        this.viewElems.showsWrapper.innerHTML= "";
+    renderCardsOnList = shows => {
+        Array.from(
+            document.querySelectorAll("[data-show-id]")
+        ).forEach(btn => {
+            btn.removeEventListener('click', this.openDetailsView);
+        })
+        this.viewElems.showsWrapper.innerHTML = "";
+
         for (const { show } of shows) {
-            this.createShowCard(show);
+            const card = this.createShowCard(show);
+            this.viewElems.showsWrapper.appendChild(card);
         }
     }
 
-    createShowCard = show => {
+    closeDetailsView = (event) =>{
+        const {showId} = event.target.dataset;
+        const closeBtn = document.querySelector(`[id=showPreview] [data-show-id="${showId}"]`);
+        closeBtn.removeEventListener('click', this.closeDetailsView);
+        this.viewElems.showPreview.style.display = "none";
+        this.viewElems.showPreview.innerHTML = "";
+    }
+
+    openDetailsView = (event) => {
+        const { showId } = event.target.dataset;
+        getShowsById(showId).then(show =>{
+            const card = this.createShowCard(show, true);
+            this.viewElems.showPreview.appendChild(card);
+            this.viewElems.showPreview.style.display='block';
+        })
+    }
+
+    createShowCard = (show, isDetailed) => {
         const divCard = createDOMElement('div', 'card');
         const divCardBody = createDOMElement('div', 'card-body');
         const h5 = createDOMElement('h5', 'card-title', show.name);
@@ -63,15 +82,33 @@ class TVapp {
         let img, p;
 
         if (show.image) {
-            img = createDOMElement('img', 'card-img-top', null, show.image.medium);
+            if (isDetailed) {
+                img = createDOMElement('div', 'card-preview-bg');
+                img.style.backgroundImage = `url('${show.image.original}')`;
+            }else {
+                img = createDOMElement('img', 'card-img-top', null, show.image.medium);
+            }
         } else {
             img = createDOMElement('img', 'card-img-top', null, 'https://via.placeholder.com/210x295');
         }
 
         if (show.summary) {
-            p = createDOMElement('p', 'card-text', `${show.summary.slice(0, 80)}...`);
+            if (isDetailed) {
+                p = createDOMElement('p', 'card-text', show.summary);
+            } else {
+                p = createDOMElement('p', 'card-text', `${show.summary.slice(0, 80)}...`);
+            }
         } else {
             p = createDOMElement('p', 'card-text', 'There is no any description for that show yet.');
+        }
+
+        btn.dataset.showId = show.id;
+        
+        if (isDetailed) {
+             btn.addEventListener('click', this.closeDetailsView);
+
+        }else {
+             btn.addEventListener('click', this.openDetailsView);
         }
 
         divCard.appendChild(divCardBody);
@@ -79,7 +116,8 @@ class TVapp {
         divCardBody.appendChild(h5);
         divCardBody.appendChild(p);
         divCardBody.appendChild(btn);
-        this.viewElems.showsWrapper.appendChild(divCard);
+
+        return divCard;
     }
 
 
