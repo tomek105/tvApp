@@ -117,17 +117,21 @@ class TVapp {
         }
 
         if (show.summary) {
+            let showSummary = show.summary;
+            showSummary = showSummary.replace(/<[^>]*>/g,''); //Delete HTML tags
+
             if (isDetailed) {
-                p = createDOMElement('p', 'card-text', show.summary);
+                p = createDOMElement('p', 'card-text', showSummary);
             } else {
-                p = createDOMElement('p', 'card-text', `${show.summary.slice(0, 80)}...`);
+                p = createDOMElement('p', 'card-text', `${showSummary.slice(0, 80)}...`);
             }
         } else {
             p = createDOMElement('p', 'card-text', 'There is no any description for that show yet.');
         }
 
         xBtn.dataset.showId = show.id;        
-        btn.dataset.showId = show.id;        
+        btn.dataset.showId = show.id;    
+
         if (isDetailed) {
             document.body.style.overflow = "hidden";
             xBtn.appendChild(xIcon);
@@ -143,6 +147,7 @@ class TVapp {
         }else {
             btn.addEventListener('click', this.openDetailsView);
         }
+
         divCard.appendChild(divCardBody);
         divCardBody.appendChild(img);
         divCardBody.appendChild(h5);
