@@ -16,11 +16,19 @@ body {
 }
 
 .shows-wrapper .card {
+  position: relative;
   width: 24%;
   margin-bottom: 1.5%;
   margin-right: 0.5%;
 }
-
+.shows-wrapper .card button {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+.shows-wrapper .card p{
+  margin-bottom: 2rem;
+}
 .show-preview {
   position: fixed;
   left: 50%;

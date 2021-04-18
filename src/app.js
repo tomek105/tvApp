@@ -3,7 +3,7 @@
     -Styl close button w karcie show oraz X w rogu. (done)
     -Gdy karta show jest włączona, scroll na body wyłącz, potem przywróć. (done)
     -Input do wpisania dowolnego tekstu z buttonem który wysyła request. (done)
-    -Poprawki w wyglądzie, karty obok siebie, usuń znaczniki html z tekstu, buttony na tej samej wysokości.
+    -Poprawki w wyglądzie, karty obok siebie, usuń znaczniki html z tekstu, buttony na tej samej wysokości. (done)
     -Jeśli jest więcej niż 10 kart, stwórz następną stronę.
     -Ulubione show (gwiazdka), zapisane w local storage. Ma się pokazywać po refreshu.
 */
