@@ -1,3 +1,12 @@
+/* 
+    Dodać/Zmienić:
+    -Styl close button w karcie show oraz X w rogu. (done)
+    -Gdy karta show jest włączona, scroll na body wyłącz, potem przywróć. (done)
+    -Input do wpisania dowolnego tekstu z buttonem który wysyła request.
+    -Poprawki w wyglądzie, karty obok siebie, usuń znaczniki html z tekstu, buttony na tej samej wysokości.
+    -Jeśli jest więcej niż 10 kart, stwórz następną stronę.
+    -Ulubione show (gwiazdka), zapisane w local storage. Ma się pokazywać po refreshu.
+*/
 import {
     mapListToDOMElements,
     createDOMElement
@@ -10,7 +19,7 @@ class TVapp {
     constructor() {
         this.viewElems = {};
         this.showNamesButtons = {};
-        this.selectedName = "harry";
+        this.selectedName = "harry";            
         this.initializeApp();
     }
 
@@ -57,12 +66,12 @@ class TVapp {
         }
     }
 
-    closeDetailsView = (event) =>{
-        const {showId} = event.target.dataset;
-        const closeBtn = document.querySelector(`[id=showPreview] [data-show-id="${showId}"]`);
+    closeDetailsView = () =>{
+        const closeBtn = document.querySelector(`[id="showPreview"] [data-show-id]`);
         closeBtn.removeEventListener('click', this.closeDetailsView);
         this.viewElems.showPreview.style.display = "none";
         this.viewElems.showPreview.innerHTML = "";
+        document.body.style.overflow = "initial";
     }
 
     openDetailsView = (event) => {
@@ -73,12 +82,15 @@ class TVapp {
             this.viewElems.showPreview.style.display='block';
         })
     }
-
+   
     createShowCard = (show, isDetailed) => {
         const divCard = createDOMElement('div', 'card');
         const divCardBody = createDOMElement('div', 'card-body');
         const h5 = createDOMElement('h5', 'card-title', show.name);
         const btn = createDOMElement('button', 'btn btn-primary', 'Show more');
+        const xBtn = createDOMElement('button', 'closeButton');
+        const xIcon = createDOMElement('img', 'closeImage', null, "img/cancel.svg");
+
         let img, p;
 
         if (show.image) {
@@ -102,15 +114,23 @@ class TVapp {
             p = createDOMElement('p', 'card-text', 'There is no any description for that show yet.');
         }
 
-        btn.dataset.showId = show.id;
-        
+        xBtn.dataset.showId = show.id;        
+        btn.dataset.showId = show.id;        
         if (isDetailed) {
-             btn.addEventListener('click', this.closeDetailsView);
+            document.body.style.overflow = "hidden";
+            xBtn.appendChild(xIcon);
+            divCard.appendChild(xBtn);     
+           
+            btn.innerText = 'Close';
+            btn.classList.remove("btn", "btn-primary");
+            btn.classList.add("btn", "btn-danger");
+
+            xBtn.addEventListener('click', this.closeDetailsView);
+            btn.addEventListener('click', this.closeDetailsView);
 
         }else {
-             btn.addEventListener('click', this.openDetailsView);
+            btn.addEventListener('click', this.openDetailsView);
         }
-
         divCard.appendChild(divCardBody);
         divCardBody.appendChild(img);
         divCardBody.appendChild(h5);
