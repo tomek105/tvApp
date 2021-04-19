@@ -106,7 +106,13 @@ class TVapp {
                 img = createDOMElement('img', 'card-img-top', null, show.image.medium);
             }
         } else {
-            img = createDOMElement('img', 'card-img-top', null, 'https://via.placeholder.com/210x295');
+            if (isDetailed) {
+                img = createDOMElement('img', 'card-img-top', null, 'https://via.placeholder.com/210x295');
+                img.style.height = "fit-content";
+
+            }else{
+                img = createDOMElement('img', 'card-img-top', null, 'https://via.placeholder.com/210x295');
+            }
         }
 
         if (show.summary) {
