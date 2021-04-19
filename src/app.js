@@ -1,12 +1,3 @@
-/* 
-    Dodać/Zmienić:
-    -Styl close button w karcie show oraz X w rogu. (done)
-    -Gdy karta show jest włączona, scroll na body wyłącz, potem przywróć. (done)
-    -Input do wpisania dowolnego tekstu z buttonem który wysyła request. (done)
-    -Poprawki w wyglądzie, karty obok siebie, usuń znaczniki html z tekstu, buttony na tej samej wysokości. (done)
-    -Jeśli jest więcej niż 10 kart, stwórz następną stronę.
-    -Ulubione show (gwiazdka), zapisane w local storage. Ma się pokazywać po refreshu.
-*/
 import {
     mapListToDOMElements,
     createDOMElement
@@ -89,6 +80,7 @@ class TVapp {
     openDetailsView = (event) => {
         const { showId } = event.target.dataset;
         getShowsById(showId).then(show =>{
+            console.log(show, showId);
             const card = this.createShowCard(show, true);
             this.viewElems.showPreview.appendChild(card);
             this.viewElems.showPreview.style.display='block';
@@ -102,6 +94,7 @@ class TVapp {
         const btn = createDOMElement('button', 'btn btn-primary', 'Show more');
         const xBtn = createDOMElement('button', 'closeButton');
         const xIcon = createDOMElement('img', 'closeImage', null, "img/cancel.svg");
+        const genres = createDOMElement('ul'); 
 
         let img, p;
 
@@ -129,6 +122,15 @@ class TVapp {
             p = createDOMElement('p', 'card-text', 'There is no any description for that show yet.');
         }
 
+        if (show.genres) {
+            if (isDetailed) {                      
+                show.genres.forEach(entry =>{
+                   const genresType = createDOMElement('li', 'genres-type', entry);
+                   genres.appendChild(genresType);
+                })
+            }
+        } 
+
         xBtn.dataset.showId = show.id;        
         btn.dataset.showId = show.id;    
 
@@ -152,6 +154,7 @@ class TVapp {
         divCardBody.appendChild(img);
         divCardBody.appendChild(h5);
         divCardBody.appendChild(p);
+        divCardBody.appendChild(genres);     
         divCardBody.appendChild(btn);
 
         return divCard;
