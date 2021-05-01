@@ -10,7 +10,7 @@ class TVapp {
     constructor() {
         this.viewElems = {};
         this.showNamesButtons = {};
-        this.selectedName = "";            
+        this.selectedName = "";      
         this.initializeApp();
     }
 
@@ -136,7 +136,6 @@ class TVapp {
                 })
             }
         } 
-
         xBtn.dataset.showId = show.id;        
         btn.dataset.showId = show.id;    
 
@@ -159,8 +158,8 @@ class TVapp {
         divCard.appendChild(divCardBody);
         divCardBody.appendChild(img);
         divCardBody.appendChild(h5);
-        divCardBody.appendChild(p);
         divCardBody.appendChild(genres);     
+        divCardBody.appendChild(p);
         divCardBody.appendChild(btn);
 
         return divCard;

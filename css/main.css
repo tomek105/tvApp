@@ -21,9 +21,14 @@ body {
   margin-bottom: 1.5%;
   margin-right: 0.5%;
 }
-.shows-wrapper .card button {
+.shows-wrapper .card .btn-primary {
   position: absolute;
   left: 0;
+  bottom: 0;
+}
+.shows-wrapper .card .btn-outline-warning {
+  position: absolute;
+  right: 0;
   bottom: 0;
 }
 .shows-wrapper .card p{
